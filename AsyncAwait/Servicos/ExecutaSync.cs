@@ -1,19 +1,23 @@
-using AsyncAwait.Models.Sync;
+using AsyncAwait.Models;
+using AsyncAwait.Servicos.Async;
+using AsyncAwait.Servicos.Sync;
 
 namespace AsyncAwait.Servicos;
 
 public class ExecutaSync
 {
-     public static void Faca()
+     public static void Faca(List<Pizza> pizzasSolicitadas)
      {
-        //var pizzaria = new Pizzaria();
+        //var pizzaria = new PizzariaAsync();
+        var pizzaria = new PizzariaSync();
 
-        //// Fazendo o pedido de forma síncrona
-        //var pedido = pizzaria.PedirPizza("Calabresa");
+        // Primeiro, fazemos os pedidos para todas as pizzas.
+        var pedido = pizzaria.PedirPizzas(pizzasSolicitadas);
 
-        //// Preparando a pizza de forma síncrona
-        //var pizza = pizzaria.PrepararPizza(pedido);
+        // Prepara as pizzas do pedido.
+        pizzaria.PrepararPedido(pedido);
 
-        //Console.WriteLine($"Pizza de {pizza.Sabor} está pronta para ser entregue!");
+        // Assuma que após preparar todas as pizzas, elas são entregues.
+        pizzaria.EntregarPizza(pedido);
      }
 }

@@ -5,7 +5,7 @@ public class Program
 {
     private static async Task Main(string[] args)
     {
-        Console.WriteLine("Iniciando programa Sync");
+        Console.WriteLine("Iniciando programa Async");
 
         var pizzas = new List<Pizza> {
             new Pizza { Sabor = "Frago com Catupiri", Tempo = 9000 },
@@ -14,11 +14,21 @@ public class Program
             new Pizza { Sabor = "Calabresa", Tempo = 5500 }
         };
 
-        await ExecutaAsync.FacaAsync(pizzas);
+        var inicioAsync = DateTime.Now;
+        await ExecutaAsync.FacaAsync(pizzas, false);
+        var duracaoAsync = DateTime.Now - inicioAsync;
+        Terminal.Espacos();
+        Console.WriteLine($"Demorou {duracaoAsync.TotalMinutes:0.##} Minutos/Segundos para a execução Async");
+        Terminal.Espacos();
 
-        // Console.WriteLine("Iniciando programa Async");
-        // ExecutaSync.Faca();
+        Console.WriteLine("Iniciando programa Sync");
+        var inicioSync = DateTime.Now;
+        ExecutaSync.Faca(pizzas);
+        Terminal.Espacos();
+        var duracaoSync = DateTime.Now - inicioSync;
+        Console.WriteLine($"Demorou {duracaoSync.TotalMinutes:0.##} Minutos/Segundos para a execução Sync");
 
         Console.Read();
     }
+
 }

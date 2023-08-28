@@ -1,32 +1,69 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using AsyncAwait.Models;
 
-namespace AsyncAwait.Models.Sync;
+namespace AsyncAwait.Servicos.Sync;
 
-public class Pizzaria
+public class PizzariaSync
 {
-    //public Pedido PedirPizza(string sabor)
-    //{
-    //    Console.WriteLine("Recebendo pedido...");
-    //    Thread.Sleep(2000);  // Simula o tempo para processar o pedido.
+    public Pedido PedirPizzas(List<Pizza> pizzas)
+    {
+        Terminal.EscrevaAmarelo("Recebendo pedido...");
+        Task.Delay(1000).Wait();  // Simula o tempo para processar o pedido.
 
-    //    var pedido = new Pedido
-    //    {
-    //        Pizza = new Pizza { Sabor = sabor, Tempo = 1000 },
-    //        HorarioDoPedido = DateTime.Now
-    //    };
+        var pizzasDoPedido = new List<PizzaDoPedido>();
+        foreach (var pizza in pizzas)
+            pizzasDoPedido.Add(new PizzaDoPedido { Pizza = pizza, Concluido = false });
 
-    //    Console.WriteLine($"Pedido de pizza de {sabor} realizado às {pedido.HorarioDoPedido}!");
-    //    return pedido;
-    //}
+        var pedido = new Pedido
+        {
+            Id = new Random().Next(1, 101),
+            Pizzas = pizzasDoPedido,
+            HorarioDoPedido = DateTime.Now
+        };
 
-    //public Pizza PrepararPizza(Pedido pedido)
-    //{
-    //    Console.WriteLine($"Preparando pizza de {pedido.Pizza.Sabor}...");
-    //    Thread.Sleep(2000); // Simula o tempo para preparar a pizza.
+        Terminal.Espacos();
+        Terminal.EscrevaBranco($"Pedido de pizza com sabores {string.Join(", ", pedido.Pizzas.Select(p => p.Pizza.Sabor))} realizado às {pedido.HorarioDoPedido}!");
+        Terminal.EscrevaBranco($"Seu ID é: {pedido.Id}");
+        Terminal.Espacos();
+        return pedido;
+    }
 
-    //    Console.WriteLine($"Pizza de {pedido.Pizza.Sabor} pronta!");
-    //    return pedido.Pizza;
-    //}
+    private void PrepararPizza(PizzaDoPedido pizzaDoPedido)
+    {
+        Terminal.EscrevaAmarelo($"Preparando pizza de {pizzaDoPedido.Pizza.Sabor}...");
+        Task.Delay(pizzaDoPedido.Pizza.Tempo).Wait();
+        pizzaDoPedido.Concluido = true;
+        Terminal.EscrevaVerde($"Pizza de {pizzaDoPedido.Pizza.Sabor} pronta!");
+    }
+
+    public void PrepararPedido(Pedido pedido)
+    {
+        foreach (var pizzaDoPedido in pedido.Pizzas)
+        {
+            PrepararPizza(pizzaDoPedido);
+        }
+    }
+
+    public void EntregarPizza(Pedido pedido)
+    {
+        if (!pedido.TodasPizzasPreparadas())
+        {
+            Terminal.Espacos();
+            Terminal.EscrevaVermelho($"Pedido ID: {pedido.Id} não pode ser entregue pois nem todas as pizzas foram concluídas!");
+            return;
+        }
+
+        Terminal.Espacos();
+        Terminal.EscrevaAmarelo($"Pedido ID: {pedido.Id}, saiu para entrega no horário {pedido.HorarioDoPedido}!");
+        Terminal.Espacos();
+
+        Task.Delay(5000).Wait();  // Simula o tempo de entrega
+
+        pedido.HorarioDaEntrega = DateTime.Now;
+
+        Terminal.Espacos();
+        Terminal.EscrevaAzul($"Pedido ID: {pedido.Id}, entregue com sucesso no horário {pedido.HorarioDoPedido}!");
+    }
 }

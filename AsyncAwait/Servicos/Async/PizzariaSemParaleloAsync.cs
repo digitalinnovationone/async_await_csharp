@@ -4,7 +4,7 @@ using AsyncAwait.Models;
 
 namespace AsyncAwait.Servicos.Async;
 
-public class PizzariaAsync
+public class PizzariaSemParaleloAsync
 {
     public async Task<Pedido> PedirPizzasAsync(List<Pizza> pizzas)
     {
@@ -39,13 +39,10 @@ public class PizzariaAsync
 
     public async Task PrepararPedidoAsync(Pedido pedido)
     {
-        var tarefasDePreparo = new List<Task>();
         foreach (var pizzaDoPedido in pedido.Pizzas)
         {
-            tarefasDePreparo.Add(prepararPizzaAsync(pizzaDoPedido));
+            await prepararPizzaAsync(pizzaDoPedido);
         }
-
-        await Task.WhenAll(tarefasDePreparo);
     }
 
 

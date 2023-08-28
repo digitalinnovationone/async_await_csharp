@@ -1,4 +1,3 @@
-using AsyncAwait.Models.Sync;
 
 namespace AsyncAwait.Servicos;
 
@@ -37,5 +36,10 @@ public class Terminal
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(mensagem);
         Console.ResetColor();
+    }
+
+    public static void Espacos()
+    {
+        Console.WriteLine("\n");
     }
 }

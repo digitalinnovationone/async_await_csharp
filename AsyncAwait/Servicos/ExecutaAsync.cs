@@ -7,18 +7,34 @@ namespace AsyncAwait.Servicos
 {
     public class ExecutaAsync
     {
-        public static async Task FacaAsync(List<Pizza> pizzasSolicitadas)
+        public static async Task FacaAsync(List<Pizza> pizzasSolicitadas, bool paralelo)
         {
-            var pizzaria = new PizzariaAsync();
+            if (paralelo)
+            {
+                var pizzaria = new PizzariaAsync();
 
-            // Primeiro, fazemos os pedidos para todas as pizzas.
-            var pedido = await pizzaria.PedirPizzasAsync(pizzasSolicitadas);
+                // Primeiro, fazemos os pedidos para todas as pizzas.
+                var pedido = await pizzaria.PedirPizzasAsync(pizzasSolicitadas);
 
-            // Prepara as pizzas do pedido.
-            await pizzaria.PrepararPedidoAsync(pedido);
+                // Prepara as pizzas do pedido.
+                await pizzaria.PrepararPedidoAsync(pedido);
 
-            // Assuma que após preparar todas as pizzas, elas são entregues.
-            await pizzaria.EntregarPizzaAsync(pedido);
+                // Assuma que após preparar todas as pizzas, elas são entregues.
+                await pizzaria.EntregarPizzaAsync(pedido);
+            }
+            else
+            {
+                var pizzaria = new PizzariaSemParaleloAsync();
+
+                // Primeiro, fazemos os pedidos para todas as pizzas.
+                var pedido = await pizzaria.PedirPizzasAsync(pizzasSolicitadas);
+
+                // Prepara as pizzas do pedido.
+                await pizzaria.PrepararPedidoAsync(pedido);
+
+                // Assuma que após preparar todas as pizzas, elas são entregues.
+                await pizzaria.EntregarPizzaAsync(pedido);
+            }
         }
     }
 }
