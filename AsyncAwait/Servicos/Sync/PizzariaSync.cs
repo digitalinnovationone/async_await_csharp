@@ -30,7 +30,7 @@ public class PizzariaSync
         return pedido;
     }
 
-    private void PrepararPizza(PizzaDoPedido pizzaDoPedido)
+    private void prepararPizza(PizzaDoPedido pizzaDoPedido)
     {
         Terminal.EscrevaAmarelo($"Preparando pizza de {pizzaDoPedido.Pizza.Sabor}...");
         Task.Delay(pizzaDoPedido.Pizza.Tempo).Wait();
@@ -42,7 +42,7 @@ public class PizzariaSync
     {
         foreach (var pizzaDoPedido in pedido.Pizzas)
         {
-            PrepararPizza(pizzaDoPedido);
+            prepararPizza(pizzaDoPedido);
         }
     }
 
