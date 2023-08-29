@@ -8,14 +8,14 @@ public class Program
         Console.WriteLine("Iniciando programa Async");
 
         var pizzas = new List<Pizza> {
-            new Pizza { Sabor = "Frago com Catupiri", Tempo = 9000 },
+            new Pizza { Sabor = "Frango com Catupiry", Tempo = 9000 },
             new Pizza { Sabor = "Mussarela", Tempo = 5000 },
-            new Pizza { Sabor = "Peperone", Tempo = 7000 },
+            new Pizza { Sabor = "Pepperoni", Tempo = 7000 },
             new Pizza { Sabor = "Calabresa", Tempo = 5500 }
         };
 
         var inicioAsync = DateTime.Now;
-        await ExecutaAsync.FacaAsync(pizzas, false);
+        await ExecutaAsync.FacaAsync(pizzas, true);
         var duracaoAsync = DateTime.Now - inicioAsync;
         Terminal.Espacos();
         Console.WriteLine($"Demorou {duracaoAsync.TotalMinutes:0.##} Minutos/Segundos para a execução Async");
